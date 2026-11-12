@@ -42,8 +42,7 @@ The site must include:
     (destination is a placeholder for v1).
     - Footer with copyright "© 2026 Barberly".
 
-2. Authentication using Lovable's built-in Supabase-style auth (Lovable Cloud
-    is fine for v1; we'll swap to a user-owned Supabase project later):
+2. Authentication using the project's own Supabase project (email/password):
     - A combined Sign Up / Sign In page at /login with email + password.
     - On the Sign Up form, include a role selector as a TAB / segmented toggle
     at the top of the form with two options labeled "Customer" (role value
