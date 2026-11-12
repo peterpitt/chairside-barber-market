@@ -1,28 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Search, BadgeCheck, Zap, ShieldCheck, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Wordmark } from "@/components/Wordmark";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import heroLeft from "@/assets/hero-left.jpg";
 import heroRight from "@/assets/hero-right.jpg";
 import barbersGrid from "@/assets/barbers-grid.jpg";
-
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Barberly — Find your barber, book in a few taps" },
-      {
-        name: "description",
-        content: "Discover verified barbers and hair stylists near you and book a Cut, Color, Perm or Beard appointment online.",
-      },
-      { property: "og:title", content: "Barberly — Style with Confident Hair" },
-      { property: "og:description", content: "Discover great barbers and book a slot in a few taps." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
-});
 
 const SERVICES = ["All", "Cut", "Color", "Perm", "Beard"] as const;
 
@@ -42,7 +26,8 @@ const FEATURES = [
 
 const LOGOS = ["MAISON CUT", "Hinoki", "CROWN & CURL", "Atelier", "Tradition", "NORDIC GROOM"];
 
-function Index() {
+export default function Index() {
+  useDocumentTitle("Barberly — Find your barber, book in a few taps");
   const [active, setActive] = useState<(typeof SERVICES)[number]>("All");
   const visible = active === "All" ? BARBERS : BARBERS.filter((b) => b.services.includes(active));
 

@@ -1,27 +1,15 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Wordmark } from "@/components/Wordmark";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import heroRight from "@/assets/hero-right.jpg";
-
-export const Route = createFileRoute("/login")({
-  head: () => ({
-    meta: [
-      { title: "Sign in or sign up — Barberly" },
-      { name: "description", content: "Create a Barberly account as a customer or barber, or sign in." },
-      { property: "og:title", content: "Sign in — Barberly" },
-      { property: "og:description", content: "Join Barberly as a customer or barber." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: LoginPage,
-});
 
 type Role = "customer" | "shop";
 
-function LoginPage() {
+export default function Login() {
+  useDocumentTitle("Sign in or sign up — Barberly");
   const navigate = useNavigate();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [role, setRole] = useState<Role>("customer");
@@ -32,7 +20,7 @@ function LoginPage() {
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) navigate({ to: "/barbers", replace: true });
+      if (data.user) navigate("/barbers", { replace: true });
     });
   }, [navigate]);
 
@@ -51,7 +39,7 @@ function LoginPage() {
     setLoading(false);
     if (res.error) return setError(res.error.message);
     if (!res.data.session) return setError("Account created — please sign in.");
-    navigate({ to: "/barbers", replace: true });
+    navigate("/barbers", { replace: true });
   }
 
   return (

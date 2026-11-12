@@ -1,35 +1,40 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Wordmark } from "@/components/Wordmark";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 
-export const Route = createFileRoute("/_authenticated/barbers")({
-  head: () => ({
-    meta: [
-      { title: "Your Barberly" },
-      { name: "description", content: "Your Barberly home." },
-      { property: "og:title", content: "Your Barberly" },
-      { property: "og:description", content: "Your Barberly home." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "robots", content: "noindex" },
-    ],
-  }),
-  component: BarbersPage,
-});
-
-function BarbersPage() {
-  const { user } = Route.useRouteContext();
+export default function Barbers() {
+  useDocumentTitle("Your Barberly");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [checked, setChecked] = useState(false);
+
+  // Client-side auth guard (replaces the TanStack _authenticated beforeLoad redirect).
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) {
+        navigate("/login", { replace: true });
+        return;
+      }
+      setUser(data.user);
+      setChecked(true);
+    });
+  }, [navigate]);
+
+  if (!checked || !user) return null;
+
   const isShop = user.user_metadata?.["role"] === "shop";
 
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/login", replace: true });
+    navigate("/login", { replace: true });
   }
 
   return (

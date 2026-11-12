@@ -76,23 +76,38 @@ role-aware /barbers placeholder shell.
 
 請注意左右兩邊除歐美男女也要加入東方人
 
-This project was built with [Lovable](https://lovable.dev).
+## Tech stack
 
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/d9c1e3bf-4a8d-49ca-bfbb-a8b902655562).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+- [Vite](https://vite.dev/) + [React 19](https://react.dev/) (TypeScript) — static single-page app
+- [React Router](https://reactrouter.com/) for client-side routing (`/`, `/login`, `/barbers`)
+- [Tailwind CSS v4](https://tailwindcss.com/) + shadcn/ui components
+- [Supabase](https://supabase.com/) (`@supabase/supabase-js`) for email/password auth
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+You need Node.js and npm.
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+git clone https://github.com/peterpitt/chairside-barber-market.git
+cd chairside-barber-market
+npm install
 npm run dev
 ```
+
+Other scripts: `npm run build` (production build to `dist/`), `npm run preview`
+(serve the build locally), `npm run test` (Vitest), `npm run lint`.
+
+### Environment variables
+
+Set these for both local dev (`.env`) and in the Vercel project settings:
+
+```
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_PUBLISHABLE_KEY=...
+```
+
+## Deploy on Vercel
+
+This is a static SPA. Vercel auto-detects the Vite preset (build `vite build`,
+output `dist/`). `vercel.json` rewrites all paths to `/index.html` so client-side
+deep links such as `/login` and `/barbers` resolve instead of 404-ing.
