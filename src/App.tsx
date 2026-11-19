@@ -2,9 +2,12 @@ import { useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Toaster } from "@/components/ui/sonner";
 import Index from "@/pages/Index";
 import Login from "@/pages/Login";
 import Barbers from "@/pages/Barbers";
+import ShopOnboarding from "@/pages/ShopOnboarding";
+import ShopBookings from "@/pages/ShopBookings";
 
 const queryClient = new QueryClient();
 
@@ -45,8 +48,11 @@ export default function App() {
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route path="/barbers" element={<Barbers />} />
+        <Route path="/shop" element={<ShopOnboarding />} />
+        <Route path="/shop/bookings" element={<ShopBookings />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Toaster />
     </QueryClientProvider>
   );
 }
